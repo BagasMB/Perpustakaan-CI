@@ -25,8 +25,8 @@
               <td><?= $value['kode_peminjaman']; ?></td>
               <td><?= $value['tanggal_peminjaman']; ?></td>
               <td>
-                <a href="<?= base_url('peminjaman/detail/' . $value['kode_peminjaman']); ?>" type="button" class="btn btn-warning btn-sm">
-                  <i class="bx bx-info-circle me-2"></i> Info
+                <a href="<?= base_url('peminjaman/detail/' . $value['kode_peminjaman']); ?>" type="button" class="btn btn-primary btn-sm">
+                  <i class="bx bx-info-circle me-2"></i> Detail
                 </a>
               </td>
             </tr>

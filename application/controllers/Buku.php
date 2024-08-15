@@ -9,6 +9,7 @@ class Buku extends CI_Controller
     if ($this->session->userdata('username') == null) {
       redirect('auth');
     }
+    $this->load->model('BukuModel');
   }
   public function index()
   {
@@ -31,21 +32,24 @@ class Buku extends CI_Controller
       $this->session->set_flashdata('gagal', 'Yahh, Semua Field Harus DiIsi!!!');
       redirect('buku');
     } else {
-      $data = [
-        'judul' => $this->input->post('judul'),
-        'penulis' => $this->input->post('penulis'),
-        'penerbit' => $this->input->post('penerbit'),
-        'id_kategori' => $this->input->post('id_kategori'),
-        'tahun_terbit' => $this->input->post('tahun_terbit'),
-        'stok' => $this->input->post('stok'),
-      ];
-      $this->db->insert('buku', $data);
-      $this->session->set_flashdata('berhasil', 'Yeaaaaaaaaaay!!!');
+      $namaFoto = date('YmdHis') . '.jpg';
+      $config['allowed_types'] = '*';
+      $config['upload_path']   = 'assets/img/buku/';
+      $config['file_name']     = $namaFoto;
+      $this->load->library('upload', $config);
+      if (!$this->upload->do_upload('foto')) {
+        $error = array('error', $this->upload->display_errors());
+        $this->BukuModel->simpanBuku($namaFoto);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $this->BukuModel->simpanBuku($namaFoto);
+        $this->session->set_flashdata('berhasil', 'Yeaaaaaaaaaay!!!');
+      }
       redirect('buku');
     }
   }
 
-  public function  edit()
+  public function edit()
   {
     $this->form_validation->set_rules('judul', 'Judul', 'trim|required', ['required' => 'Judul Tidak Boleh Kosong']);
     $this->form_validation->set_rules('penulis', 'Penulis', 'trim|required', ['required' => 'Penulis Tidak Boleh Kosong']);
@@ -56,17 +60,22 @@ class Buku extends CI_Controller
       $this->session->set_flashdata('gagal', 'Yahh, Semua Field Harus DiIsi!!!');
       redirect('buku');
     } else {
-      $data = [
-        'judul' => $this->input->post('judul'),
-        'penulis' => $this->input->post('penulis'),
-        'penerbit' => $this->input->post('penerbit'),
-        'id_kategori' => $this->input->post('id_kategori'),
-        'tahun_terbit' => $this->input->post('tahun_terbit'),
-        'stok' => $this->input->post('stok'),
-      ];
-      $where = ['id_buku' => $this->input->post('id_buku')];
-      $this->db->update('buku', $data, $where);
-      $this->session->set_flashdata('berhasil', 'Yeaaaaaaaaaay!!!');
+      $namaFoto = $this->input->post('nama_foto');
+      $config['allowed_types'] = '*';
+      // $config['max_size']      = 2048 * 1024;
+      $config['upload_path']   = 'assets/img/buku/';
+      $config['file_name']     = $namaFoto;
+      $config['overwrite']     = true;
+      $this->load->library('upload', $config);
+      if (!$this->upload->do_upload('foto')) {
+        $error = array('error', $this->upload->display_errors());
+        $this->BukuModel->editBuku($namaFoto);
+        $this->session->set_flashdata('berhasil', 'Gemgeekang Gacorr!!!');
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $this->BukuModel->editBuku($namaFoto);
+        $this->session->set_flashdata('berhasil', 'Gemgeekang Gacorr!!!');
+      }
       redirect('buku');
     }
   }

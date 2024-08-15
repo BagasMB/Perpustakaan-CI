@@ -1,5 +1,12 @@
      <!-- Navbar -->
+     <?php
+      $this->db->from('koleksi p');
+      $this->db->join('buku b', 'p.id_buku = b.id_buku');
+      $this->db->where('p.id_user', $this->session->userdata('id_user'));
+      $koleksi = $this->db->get()->num_rows();
 
+
+      ?>
      <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
        <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
          <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
@@ -19,7 +26,15 @@
 
          <ul class="navbar-nav flex-row align-items-center ms-auto">
            <!-- Place this tag where you want the button to render. -->
-           <li class="nav-item lh-1 me-2">
+           <li class="nav-item lh-1 me-2 d-flex align-items-center justify-content-between">
+             <a href="<?= base_url('koleksi'); ?>">
+               <span type="button" class="badge bg-primary position-relative mx-4">
+                 <i class="bx bx-book"></i>
+                 <span class="badge bg-danger position-absolute top-0 start-100 translate-middle badge-pill">
+                   <?= $koleksi; ?>
+                 </span>
+               </span>
+             </a>
              <span class="fw-semibold d-block"><?= $this->session->userdata('nama'); ?></span>
            </li>
 

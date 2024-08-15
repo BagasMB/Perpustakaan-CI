@@ -54,6 +54,13 @@
          <div data-i18n="Analytics">Dashboard</div>
        </a>
      </li>
+     
+     <li class="menu-item <?= $menu == "ulasan" ? 'active' : '' ?>">
+       <a href="<?= base_url('ulasan'); ?>" class="menu-link">
+         <i class="menu-icon tf-icons bx bx-comment"></i>
+         <div data-i18n="Analytics">Ulasan</div>
+       </a>
+     </li>
 
      <?php if ($this->session->userdata('role') == 'Peminjam') : ?>
        <li class="menu-item <?= $menu == "peminjaman" ? 'active' : '' ?>">

@@ -16,6 +16,7 @@
             <th>Nama</th>
             <th>Email</th>
             <th>Alamat</th>
+            <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -28,12 +29,16 @@
               <td><?= $value['nama']; ?></td>
               <td><?= $value['email']; ?></td>
               <td><?= $value['alamat']; ?></td>
+              <td><?= $value['role']; ?></td>
               <td>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $value['id_user']; ?>">
-                  <i class="bx bx-edit-alt me-2"></i> Edit
+                  <i class="bx bx-edit-alt me-1"></i>Edit
                 </button>
+                <a href="<?= base_url('user/reset/' . $value['id_user']); ?>" id="yakin" type="button" class="btn btn-warning btn-sm">
+                  <i class="bx bx-refresh me-1"></i>Reset
+                </a>
                 <a href="<?= base_url('user/hapus/' . $value['id_user']); ?>" id="btn-hapus" type="button" class="btn btn-danger btn-sm">
-                  <i class="bx bx-trash me-2"></i> Delete
+                  <i class="bx bx-trash me-1"></i>Delete
                 </a>
               </td>
             </tr>

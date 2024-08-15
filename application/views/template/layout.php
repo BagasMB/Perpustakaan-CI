@@ -182,6 +182,24 @@
         }
       });
     });
+
+    $(document).on("click", "#yakin", function(e) {
+      e.preventDefault();
+      const href = $(this).attr("href");
+
+      Swal.fire({
+        title: "Apakah Anda Yakin?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yakinn!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.location = href;
+        }
+      });
+    });
   </script>
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

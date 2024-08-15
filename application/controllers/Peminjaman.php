@@ -111,6 +111,7 @@ class Peminjaman extends CI_Controller
     $data = [
       'title' => 'Peminjaman',
       'peminjaman' =>  $this->db->join('user', 'user.id_user = peminjaman.id_user')->order_by('kode_peminjaman', 'DESC')->get('peminjaman')->result_array(),
+      'user' => $this->db->where('role', "Peminjam")->get('user')->result_array(),
     ];
     $this->template->load('template/layout', 'dataPeminjaman', $data);
   }

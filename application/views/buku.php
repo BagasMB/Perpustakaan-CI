@@ -48,8 +48,8 @@
                     <h5 class="modal-title" id="exampleModalLabel3">Edit Data Buku</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <form action="<?= base_url('buku/edit'); ?>" method="post">
-                    <input type="hidden" name="id_buku" value="<?= $value['id_buku']; ?>">
+                  <form action="<?= base_url('buku/edit'); ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="nama_foto" value="<?= $value['foto']; ?>">
                     <div class="modal-body">
                       <div class="row">
                         <div class="form-group col-sm-6 mb-2">
@@ -85,6 +85,12 @@
                           <input type="number" class="form-control" name="stok" value="<?= $value['stok']; ?>" autocomplete="off">
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="form-group col-sm mb-2">
+                          <label class="form-label">Cover</label>
+                          <input type="file" class="form-control" name="foto" autocomplete="off">
+                        </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
@@ -108,7 +114,7 @@
           <h5 class="modal-title" id="exampleModalLabel3">Tambah Data Buku</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="<?= base_url('buku/tambah'); ?>" method="post">
+        <form action="<?= base_url('buku/tambah'); ?>" method="post" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="row">
               <div class="form-group col-sm-6 mb-2">
@@ -142,6 +148,12 @@
               <div class="form-group col-sm-6 mb-2">
                 <label class="form-label">Stok Buku</label>
                 <input type="number" class="form-control" name="stok" autocomplete="off">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm mb-2">
+                <label class="form-label">Cover</label>
+                <input type="file" class="form-control" name="foto" autocomplete="off">
               </div>
             </div>
           </div>
