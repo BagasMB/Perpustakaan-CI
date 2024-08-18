@@ -8,6 +8,8 @@ class Buku extends CI_Controller
     parent::__construct();
     if ($this->session->userdata('username') == null) {
       redirect('auth');
+    } elseif ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Petugas') {
+      redirect('auth/block');
     }
     $this->load->model('BukuModel');
   }

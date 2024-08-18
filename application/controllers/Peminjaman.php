@@ -108,6 +108,9 @@ class Peminjaman extends CI_Controller
 
   public function cek()
   {
+    if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Petugas') {
+      redirect('auth/block');
+    }
     $data = [
       'title' => 'Peminjaman',
       'peminjaman' =>  $this->db->join('user', 'user.id_user = peminjaman.id_user')->order_by('kode_peminjaman', 'DESC')->get('peminjaman')->result_array(),

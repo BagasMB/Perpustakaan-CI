@@ -27,6 +27,9 @@ class Dashboard extends CI_Controller
 
 	public function laporan()
 	{
+		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Petugas') {
+			redirect('auth/block');
+		}
 		$this->load->model('PeminjamanModel');
 		$tanggal_awal 	= $this->input->post('tanggal_awal');
 		$tanggal_akhir	= $this->input->post('tanggal_akhir');

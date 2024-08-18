@@ -99,6 +99,6 @@ class Auth extends CI_Controller
 
   public function block()
   {
-    $this->load->view('dashboard');
+    $this->load->view('errors/blok');
   }
 }

@@ -37,9 +37,11 @@
                 <a href="<?= base_url('user/reset/' . $value['id_user']); ?>" id="yakin" type="button" class="btn btn-warning btn-sm">
                   <i class="bx bx-refresh me-1"></i>Reset
                 </a>
-                <a href="<?= base_url('user/hapus/' . $value['id_user']); ?>" id="btn-hapus" type="button" class="btn btn-danger btn-sm">
-                  <i class="bx bx-trash me-1"></i>Delete
-                </a>
+                <?php if ($this->session->userdata('username') != $value['username']) : ?>
+                  <a href="<?= base_url('user/hapus/' . $value['id_user']); ?>" id="btn-hapus" type="button" class="btn btn-danger btn-sm">
+                    <i class="bx bx-trash me-1"></i>Delete
+                  </a>
+                <?php endif; ?>
               </td>
             </tr>
             <div class="modal fade" id="modalEdit<?= $value['id_user']; ?>" tabindex="-1" aria-hidden="true">
