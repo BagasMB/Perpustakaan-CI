@@ -325,10 +325,10 @@
     // Script untuk menampilkan tanggal cetak secara dinamis
     document.getElementById('tanggal-cetak').innerText = new Date().toLocaleDateString('id-ID');
 
-    window.print();
-    setTimeout(function() {
-      window.close();
-    }, 100);
+    // window.print();
+    // setTimeout(function() {
+    //   window.close();
+    // }, 100);
   </script>
 </body>
 

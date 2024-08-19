@@ -45,7 +45,11 @@
    </div>
 
    <div class="menu-inner-shadow"></div>
-   <?php $menu = $this->uri->segment(1); ?>
+   <?php
+    $menu = $this->uri->segment(1);
+    $submenu = $this->uri->segment(2);
+    $submenu2 = $this->uri->segment(3);
+    ?>
    <ul class="menu-inner py-1">
      <!-- Dashboard -->
      <li class="menu-item <?= $menu == "" ? 'active' : '' ?>">
@@ -54,7 +58,7 @@
          <div data-i18n="Analytics">Dashboard</div>
        </a>
      </li>
-     
+
      <li class="menu-item <?= $menu == "ulasan" ? 'active' : '' ?>">
        <a href="<?= base_url('ulasan'); ?>" class="menu-link">
          <i class="menu-icon tf-icons bx bx-comment"></i>
@@ -73,7 +77,7 @@
 
      <?php if ($this->session->userdata('role') == 'Admin' || $this->session->userdata('role') == 'Petugas') : ?>
        <li class="menu-header small text-uppercase"><span class="menu-header-text">Petugas</span></li>
-       <li class="menu-item <?= $menu == "prosesPeminjaman" ? 'active' : '' ?>">
+       <li class="menu-item <?= $menu == "prosesPeminjaman" ? 'active' : ($menu == 'peminjaman' && $submenu == 'detail' && is_numeric($submenu2) ? 'active' : ''); ?>">
          <a href="<?= base_url('prosesPeminjaman'); ?>" class="menu-link">
            <i class="menu-icon tf-icons bx bx-package"></i>
            <div data-i18n="Analytics">Data Peminjaman</div>

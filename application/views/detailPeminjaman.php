@@ -22,33 +22,41 @@
               <td><?= $no++; ?></td>
               <td><?= $value['kode_peminjaman']; ?></td>
               <td><?= $value['judul']; ?></td>
-              <td><?= $value['tanggal_pengembalian']; ?></td>
-              <td><span class="badge bg-label-<?= $value['status'] == 'Proses' ? 'warning' : ($value['status'] == 'Dipinjam' ? 'info' : ($value['status'] == 'Dikembalikan' ? 'success' : ($value['status'] == 'Ditolak' ? 'danger' : 'secondary'))); ?>"><?= $value['status']; ?></span></td>
+              <td><?= $value['tanggal_pengembalian_real'] ? $value['tanggal_pengembalian_real']  : "-"; ?></td>
+              <?php if ($value['tanggal_pengembalian_real'] > date('Y-m-d')) : ?>
+                <td><span class="badge bg-label-danger">Terlambat</span></td>
+              <?php else: ?>
+                <td><span class="badge bg-label-<?= $value['status'] == 'Proses' ? 'warning' : ($value['status'] == 'Dipinjam' ? 'info' : ($value['status'] == 'Dikembalikan' ? 'success' : ($value['status'] == 'Ditolak' ? 'danger' : 'secondary'))); ?>"><?= $value['status']; ?></span></td>
+              <?php endif; ?>
+
 
               <?php if ($value['status'] == 'Dikembalikan') : ?>
                 <?php if ($this->session->userdata('role') == 'Peminjam') : ?>
                   <td>
                     <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUlasan<?= $value['id_detail_peminjaman']; ?>">Ulasan</button>
+                    <?php if ($value['tanggal_pengembalian_real'] > date('Y-m-d')) : ?>
+                      <button class="btn btn-danger btn-sm">Bayar Denda</button>
                   </td>
                 <?php endif; ?>
-              <?php elseif ($this->session->userdata('role') != 'Peminjam') : ?>
-                <td>
-                  <?php if ($value['status'] == 'Dipinjam') : ?>
-                    <a href="<?= base_url('peminjaman/kembalikan/' . $value['id_detail_peminjaman'] . '/' . $value['id_buku'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-primary btn-sm">
-                      Kembalikan
-                    </a>
-                  <?php else : ?>
-                    <a href="<?= base_url('peminjaman/persetujuan/' . $value['id_detail_peminjaman'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-success btn-sm">
-                      Persetujuan
-                    </a>
-                    <?php if ($value['status'] != 'Ditolak') : ?>
-                      <a href="<?= base_url('peminjaman/penolakan/' . $value['id_detail_peminjaman'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-danger btn-sm">
-                        Ditolak
-                      </a>
-                    <?php endif; ?>
-                  <?php endif; ?>
-                </td>
               <?php endif; ?>
+            <?php elseif ($this->session->userdata('role') != 'Peminjam') : ?>
+              <td>
+                <?php if ($value['status'] == 'Dipinjam') : ?>
+                  <a href="<?= base_url('peminjaman/kembalikan/' . $value['id_detail_peminjaman'] . '/' . $value['id_buku'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-primary btn-sm">
+                    Kembalikan
+                  </a>
+                <?php else : ?>
+                  <a href="<?= base_url('peminjaman/persetujuan/' . $value['id_detail_peminjaman'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-success btn-sm">
+                    Persetujuan
+                  </a>
+                  <?php if ($value['status'] != 'Ditolak') : ?>
+                    <a href="<?= base_url('peminjaman/penolakan/' . $value['id_detail_peminjaman'] . '/' . $value['kode_peminjaman']); ?>" id="yakin" class="btn btn-danger btn-sm">
+                      Ditolak
+                    </a>
+                  <?php endif; ?>
+                <?php endif; ?>
+              </td>
+            <?php endif; ?>
             </tr>
 
             <div class="modal fade" id="modalUlasan<?= $value['id_detail_peminjaman']; ?>" tabindex="-1" aria-hidden="true">

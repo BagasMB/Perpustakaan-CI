@@ -65,7 +65,7 @@
             <div class="row mb-2">
               <div class="form-group col-4">
                 <label class="form-label">Tanggal Pengembalian</label>
-                <input type="date" class="form-control" name="tanggal_pengembalian">
+                <input type="date" class="form-control" min="<?= date('Y-m-d'); ?>" max="<?= date('Y-m-d', strtotime('+14 days')); ?>" name="tanggal_pengembalian">
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Ajukan Peminjam</button>

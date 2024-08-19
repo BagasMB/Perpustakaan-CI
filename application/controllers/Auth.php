@@ -101,4 +101,52 @@ class Auth extends CI_Controller
   {
     $this->load->view('errors/blok');
   }
+
+  public function ubahPassword()
+  {
+    if ($this->session->userdata('username') == null) {
+      redirect('auth');
+    }
+    $data = [
+      'title' => 'Account | Password',
+      'user' => $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array()
+    ];
+    $this->form_validation->set_rules('password_lama', 'Password Lama', 'trim|required', [
+      'required' => 'Password tidak boleh kosong'
+    ]);
+    $this->form_validation->set_rules('password_baru1', 'Password Baru', 'trim|required|matches[password_baru2]', [
+      'required' => 'Password Baru tidak boleh kosong',
+      'matches' => 'Password Baru tidak sama dengan konfirmasi password',
+    ]);
+    $this->form_validation->set_rules(
+      'password_baru2',
+      'Konfirmasi Password Baru',
+      'trim|required|matches[password_baru1]',
+      [
+        'required' => 'Password Baru tidak boleh kosong',
+        'matches' => 'Konfirmasi password Baru tidak sama dengan Password Baru',
+      ]
+    );
+    if ($this->form_validation->run() == false) {
+      $this->template->load('template/layout', 'auth/ubahPassword', $data);
+    } else {
+      $id_user = $this->input->post('id_user');
+      $password_lama = $this->input->post('password_lama');
+      $password_baru = $this->input->post('password_baru1');
+      if (md5($password_lama) != $data['user']['password']) {
+        $this->session->set_flashdata('gagal', 'Password Anda Salah !');
+        redirect('password');
+      } else if ($data['user']['password'] == md5($password_baru)) {
+        $this->session->set_flashdata('gagal', 'Password Baru Sama Dengan Password Lama !');
+        redirect('password');
+      } else {
+        $this->db->set('password', md5($password_baru));
+        $this->db->where('id_user', $id_user);
+        $this->db->update('user');
+
+        $this->session->set_flashdata('berhasil', 'Password Berhasil DiUbah');
+        redirect('password');
+      }
+    }
+  }
 }

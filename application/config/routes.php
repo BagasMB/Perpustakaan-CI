@@ -56,3 +56,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['prosesPeminjaman'] = 'peminjaman/cek';
 $route['register'] = 'auth/register';
 $route['laporan'] = 'dashboard/laporan';
+$route['password'] = 'auth/ubahPassword';
