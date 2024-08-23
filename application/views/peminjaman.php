@@ -14,6 +14,7 @@
             <th>#</th>
             <th>Kode Peminjaman</th>
             <th>Tanggal Peminjaman</th>
+            <th>Tanggal Pengembalian</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -24,6 +25,7 @@
               <td><?= $no++; ?></td>
               <td><?= $value['kode_peminjaman']; ?></td>
               <td><?= $value['tanggal_peminjaman']; ?></td>
+              <td><?= $value['tanggal_pengembalian']; ?></td>
               <td>
                 <a href="<?= base_url('peminjaman/detail/' . $value['kode_peminjaman']); ?>" type="button" class="btn btn-primary btn-sm">
                   <i class="bx bx-info-circle me-2"></i> Detail

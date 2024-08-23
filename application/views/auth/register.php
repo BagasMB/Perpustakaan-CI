@@ -48,7 +48,7 @@
         <!-- Register Card -->
         <div class="card">
           <div class="card-body">
-            <h4 class="mb-2">Adventure starts here 🚀</h4>
+            <h4 class="mb-2">Register 🚀</h4>
             <p class="mb-4">Make your app management easy and fun!</p>
             <div id="ngilang">
               <?= $this->session->flashdata('message'); ?>

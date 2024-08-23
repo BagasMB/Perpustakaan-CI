@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 19, 2024 at 02:58 PM
+-- Generation Time: Aug 23, 2024 at 03:00 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.0.30
 
@@ -43,9 +43,30 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `judul`, `penulis`, `penerbit`, `tahun_terbit`, `id_kategori`, `stok`, `foto`) VALUES
-(1, 'Bulan', 'Tere Liye', 'Gramedia', 2016, 1, 10, '20240815052854.jpg'),
+(1, 'Bulan', 'Tere Liye', 'Gramedia', 2016, 1, 12, '20240815052854.jpg'),
 (2, 'Bumi', 'Tere Liye', 'Gramedia', 2014, 1, 10, '20240815053515.jpg'),
-(3, 'Pulang Pergi', 'Tere Liye', 'Gramet', 2022, 1, 10, '20240815064611.jpg');
+(3, 'Pulang Pergi', 'Tere Liye', 'Gramet', 2022, 1, 12, '20240815064611.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `denda`
+--
+
+CREATE TABLE `denda` (
+  `id_denda` int NOT NULL,
+  `total_denda` int NOT NULL,
+  `sudah_dibayar` int NOT NULL,
+  `status_denda` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `denda`
+--
+
+INSERT INTO `denda` (`id_denda`, `total_denda`, `sudah_dibayar`, `status_denda`) VALUES
+(1, 15000, 15000, 'Lunas'),
+(2, 15000, 15000, 'Lunas');
 
 -- --------------------------------------------------------
 
@@ -58,19 +79,20 @@ CREATE TABLE `detail_peminjaman` (
   `kode_peminjaman` varchar(20) NOT NULL,
   `id_buku` int NOT NULL,
   `id_user` int NOT NULL,
-  `jumlah` int NOT NULL,
   `tanggal_pengembalian_real` date DEFAULT NULL,
-  `status` enum('Proses','Dipinjam','Dikembalikan','Ditolak') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `status` enum('Proses','Dipinjam','Dikembalikan','Ditolak','Terlambat') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `id_denda` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `detail_peminjaman`
 --
 
-INSERT INTO `detail_peminjaman` (`id_detail_peminjaman`, `kode_peminjaman`, `id_buku`, `id_user`, `jumlah`, `tanggal_pengembalian_real`, `status`) VALUES
-(1, '2408191', 1, 3, 1, '2024-08-27', 'Dikembalikan'),
-(2, '2408191', 2, 3, 1, '2024-08-19', 'Dikembalikan'),
-(3, '2408192', 1, 6, 1, '2024-08-19', 'Dikembalikan');
+INSERT INTO `detail_peminjaman` (`id_detail_peminjaman`, `kode_peminjaman`, `id_buku`, `id_user`, `tanggal_pengembalian_real`, `status`, `id_denda`) VALUES
+(1, '2408211', 1, 5, '2024-08-23', 'Terlambat', 1),
+(2, '2408211', 3, 5, '2024-08-23', 'Terlambat', 2),
+(3, '2408222', 1, 3, '2024-08-22', 'Dikembalikan', 0),
+(4, '2408233', 1, 5, '2024-08-23', 'Dikembalikan', 0);
 
 -- --------------------------------------------------------
 
@@ -90,7 +112,19 @@ CREATE TABLE `kategori` (
 INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
 (1, 'Novel'),
 (2, 'Kartun'),
-(3, 'Dongengg');
+(3, 'Dongeng');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategoribuku_relasi`
+--
+
+CREATE TABLE `kategoribuku_relasi` (
+  `id_kategoribuku` int NOT NULL,
+  `id_buku` int NOT NULL,
+  `id_kategori` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -109,7 +143,10 @@ CREATE TABLE `koleksi` (
 --
 
 INSERT INTO `koleksi` (`id_koleksi`, `id_user`, `id_buku`) VALUES
-(18, 3, 1);
+(27, 3, 3),
+(28, 3, 1),
+(30, 5, 1),
+(31, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -131,8 +168,9 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`id_peminjaman`, `kode_peminjaman`, `tanggal_peminjaman`, `tanggal_pengembalian`, `id_user`, `id_petugas`) VALUES
-(1, '2408191', '2024-08-19', '2024-08-28', 3, 1),
-(2, '2408192', '2024-08-19', '2024-08-20', 6, 1);
+(1, '2408211', '2024-08-19', '2024-08-20', 5, 1),
+(2, '2408222', '2024-08-22', '2024-08-31', 3, 1),
+(3, '2408233', '2024-08-23', '2024-08-28', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -143,8 +181,7 @@ INSERT INTO `peminjaman` (`id_peminjaman`, `kode_peminjaman`, `tanggal_peminjama
 CREATE TABLE `temp` (
   `id_temp` int NOT NULL,
   `id_buku` int NOT NULL,
-  `id_user` int NOT NULL,
-  `jumlah` int NOT NULL
+  `id_user` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -192,9 +229,9 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id_user`, `username`, `password`, `email`, `nama`, `alamat`, `role`) VALUES
 (1, 'admin', 'd74600e380dbf727f67113fd71669d88', 'Bagas@gmail.com', 'Bagas', 'Jungke', 'Admin'),
 (2, 'petugas', 'd74600e380dbf727f67113fd71669d88', 'nadiv@gmail.com', 'Nadiv', 'Jaten', 'Petugas'),
-(3, 'peminjam', '81dc9bdb52d04dc20036dbd8313ed055', 'ardy@gmail.com', 'Ardy', 'Jetis', 'Peminjam'),
+(3, 'peminjam', 'd74600e380dbf727f67113fd71669d88', 'ardy@gmail.com', 'Ardy', 'Jetis', 'Peminjam'),
 (5, 'deco', 'd74600e380dbf727f67113fd71669d88', 'decul@gmail.com', 'Decul', 'jas', 'Peminjam'),
-(6, 'zizi', 'd74600e380dbf727f67113fd71669d88', 'zizi@gmail.com', 'Ziyy', 'jausa', 'Peminjam');
+(6, 'zizi', '81dc9bdb52d04dc20036dbd8313ed055', 'zizi@gmail.com', 'Ziyy', 'jausa', 'Peminjam');
 
 --
 -- Indexes for dumped tables
@@ -207,6 +244,12 @@ ALTER TABLE `buku`
   ADD PRIMARY KEY (`id_buku`);
 
 --
+-- Indexes for table `denda`
+--
+ALTER TABLE `denda`
+  ADD PRIMARY KEY (`id_denda`);
+
+--
 -- Indexes for table `detail_peminjaman`
 --
 ALTER TABLE `detail_peminjaman`
@@ -217,6 +260,12 @@ ALTER TABLE `detail_peminjaman`
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id_kategori`);
+
+--
+-- Indexes for table `kategoribuku_relasi`
+--
+ALTER TABLE `kategoribuku_relasi`
+  ADD PRIMARY KEY (`id_kategoribuku`);
 
 --
 -- Indexes for table `koleksi`
@@ -259,10 +308,16 @@ ALTER TABLE `buku`
   MODIFY `id_buku` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `denda`
+--
+ALTER TABLE `denda`
+  MODIFY `id_denda` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `detail_peminjaman`
 --
 ALTER TABLE `detail_peminjaman`
-  MODIFY `id_detail_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_detail_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -271,22 +326,28 @@ ALTER TABLE `kategori`
   MODIFY `id_kategori` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `kategoribuku_relasi`
+--
+ALTER TABLE `kategoribuku_relasi`
+  MODIFY `id_kategoribuku` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `koleksi`
 --
 ALTER TABLE `koleksi`
-  MODIFY `id_koleksi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_koleksi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `temp`
 --
 ALTER TABLE `temp`
-  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `ulasan`

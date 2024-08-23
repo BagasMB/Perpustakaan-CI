@@ -50,9 +50,9 @@
         <!-- Register -->
         <div class="card">
           <div class="card-body">
-            <h4 class="mb-2">Welcome to Sneat! 👋</h4>
+            <h4 class="mb-2">Login Perpustakaan! 🧑‍🎓</h4>
             <p class="mb-4">
-              Please sign-in to your account and start the adventure
+              Masukan Username And Password
             </p>
             <div id="ngilang">
               <?= $this->session->flashdata('message'); ?>
@@ -79,7 +79,7 @@
             </form>
 
             <p class="text-center">
-              <span>New on our platform?</span>
+              <span>Don't have an account yet?</span>
               <a href="<?= base_url('register'); ?>">
                 <span>Create an account</span>
               </a>

@@ -7,7 +7,6 @@
       <div class="card-body">
         <form action="<?= base_url('peminjaman/tambahPeminjaman'); ?>" method="post">
           <input type="hidden" name="id_user" value="<?= $userr->id_user; ?>">
-          <input type="hidden" name="jumlah" value="1">
           <div class="form-group mb-3">
             <label class="form-label">Nama</label>
             <input type="text" class="form-control" value="<?= $userr->nama; ?>" readonly>

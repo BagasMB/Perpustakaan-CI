@@ -44,7 +44,6 @@ class PeminjamanModel extends CI_Model
     $data = [
       'id_user' => $this->input->post('id_user'),
       'id_buku' => $this->input->post('id_buku'),
-      'jumlah'  => 1,
     ];
     $this->db->insert('temp', $data);
   }

@@ -9,6 +9,7 @@ class Peminjaman extends CI_Controller
     if ($this->session->userdata('username') == null) {
       redirect('auth');
     }
+    date_default_timezone_set('Asia/Jakarta');
     $this->load->model('PeminjamanModel');
   }
 
@@ -42,7 +43,7 @@ class Peminjaman extends CI_Controller
 
     if ($cek != NULL) {
       $this->session->set_flashdata('gagal', 'Buku sudah di pilih');
-    } else if ($stokLama < $this->input->post('jumlah')) {
+    } else if ($stokLama < 1) {
       $this->session->set_flashdata('gagal', 'Buku yang dipilih tidak cukup');
     } else {
       if ($buku_tersedia) {
@@ -76,13 +77,12 @@ class Peminjaman extends CI_Controller
           'kode_peminjaman' => $kode_peminjaman,
           'id_buku'         => $value['id_buku'],
           'id_user'         => $value['id_user'],
-          'jumlah'          => $value['jumlah'],
-          'status'          => 'proses'
+          'status'          => 'Proses'
         ];
         $this->db->insert('detail_peminjaman', $data);
 
         // Update Stok Buku
-        $data2  = ['stok' => $value['stok'] - $value['jumlah']];
+        $data2  = ['stok' => $value['stok'] - 1];
         $where1 = ['id_buku' => $value['id_buku']];
         $this->db->update('buku', $data2, $where1);
 
@@ -149,7 +149,7 @@ class Peminjaman extends CI_Controller
     redirect($_SERVER['HTTP_REFERER']);
   }
 
-  public function penolakan($id_detail_peminjaman, $kode_peminjaman)
+  public function penolakan($id_detail_peminjaman, $kode_peminjaman, $id_buku)
   {
     $data = ['status' => 'Ditolak'];
     $where = ['id_detail_peminjaman' => $id_detail_peminjaman];
@@ -160,18 +160,38 @@ class Peminjaman extends CI_Controller
     $where1 = ['kode_peminjaman' => $kode_peminjaman];
     $this->db->update('peminjaman', $data1, $where1);
 
+    $stokbuku = (int) $this->db->where('id_buku', $id_buku)->get('buku')->row()->stok;
+    // Update Data Buku
+    $data2 = ['stok' => $stokbuku + 1];
+    $where2 = ['id_buku' => $id_buku];
+    $this->db->update('buku', $data2, $where2);
+
     $this->session->set_flashdata('berhasil', 'Buku ditolak untuk dipinjam');
     redirect($_SERVER['HTTP_REFERER']);
   }
 
   public function kembalikan($id_detail_peminjaman, $id_buku, $kode_peminjaman)
   {
+    $tanggalbali = $this->db->where('kode_peminjaman', $kode_peminjaman)->get('peminjaman')->row()->tanggal_pengembalian;
+    $selisih_hari = (strtotime(date('Y-m-d')) - strtotime($tanggalbali)) / (60 * 60 * 24);
+    $total_denda = $selisih_hari * 5000;
+    if ($tanggalbali < date('Y-m-d')) {
+      $status = 'Terlambat';
+      $denda = [
+        'total_denda' => $total_denda,
+        'status_denda' => 'Belum Lunas'
+      ];
+      $this->db->insert('denda', $denda);
+      $id_denda_last = $this->db->insert_id();
+    } else {
+      $id_denda_last = 0;
+      $status = 'Dikembalikan';
+    }
     $stok = (int) $this->db->where('id_buku', $id_buku)->get('buku')->row()->stok;
-    // var_dump($buku);die;
-    // Mengganti status
-    $data = ['status' => 'Dikembalikan', 'tanggal_pengembalian_real' => date('Y-m-d')];
+    $data = ['status' => $status, 'id_denda' => $id_denda_last, 'tanggal_pengembalian_real' => date('Y-m-d')];
     $where = ['id_detail_peminjaman' => $id_detail_peminjaman];
     $this->db->update('detail_peminjaman', $data, $where);
+
 
     // Update stok buku
     $data1 = ['stok' => $stok + 1];
@@ -184,6 +204,40 @@ class Peminjaman extends CI_Controller
     $this->db->update('peminjaman', $data1, $where1);
 
     $this->session->set_flashdata('berhasil', 'Buku dikembaikan untuk dipinjam');
+    redirect($_SERVER['HTTP_REFERER']);
+  }
+
+  public function denda($id)
+  {
+    $data = [
+      'title' => 'Denda',
+      'denda' => $this->db->join('denda', 'denda.id_denda=detail_peminjaman.id_denda')->join('buku', 'buku.id_buku=detail_peminjaman.id_buku')->where('detail_peminjaman.id_denda', $id)->get('detail_peminjaman')->row()
+    ];
+
+    $this->template->load('template/layout', 'denda', $data);
+  }
+
+  public function bayardenda()
+  {
+    $total_denda = $this->input->post('total_denda');
+    $sudah_dibayar = $this->input->post('sudah_dibayar');
+    $sisa_denda = $this->input->post('sisa_denda');
+    $bayar_denda = $this->input->post('bayar_denda');
+
+    // SetStatus
+    $status = $total_denda == $sudah_dibayar + $bayar_denda ? 'Lunas' : 'Belum Lunas';
+    if ($sisa_denda >= $bayar_denda) {
+      $data = [
+        'sudah_dibayar' => $sudah_dibayar + $bayar_denda,
+        'status_denda' => $status,
+      ];
+      $where = ['id_denda' => $this->input->post('id_denda')];
+      $this->db->update('denda', $data, $where);
+    } else {
+      $this->session->set_flashdata('gagal', 'Yang dibayar melebihi');
+    }
+
+    $this->session->set_flashdata('berhasil', 'Denda Sudah DiBayar');
     redirect($_SERVER['HTTP_REFERER']);
   }
 }
