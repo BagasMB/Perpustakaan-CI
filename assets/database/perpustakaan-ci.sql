@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 23, 2024 at 03:00 PM
+-- Generation Time: Aug 29, 2024 at 10:28 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.0.30
 
@@ -66,7 +66,9 @@ CREATE TABLE `denda` (
 
 INSERT INTO `denda` (`id_denda`, `total_denda`, `sudah_dibayar`, `status_denda`) VALUES
 (1, 15000, 15000, 'Lunas'),
-(2, 15000, 15000, 'Lunas');
+(2, 15000, 15000, 'Lunas'),
+(3, 5000, 4000, 'Belum Lunas'),
+(4, 5000, 5000, 'Lunas');
 
 -- --------------------------------------------------------
 
@@ -92,7 +94,9 @@ INSERT INTO `detail_peminjaman` (`id_detail_peminjaman`, `kode_peminjaman`, `id_
 (1, '2408211', 1, 5, '2024-08-23', 'Terlambat', 1),
 (2, '2408211', 3, 5, '2024-08-23', 'Terlambat', 2),
 (3, '2408222', 1, 3, '2024-08-22', 'Dikembalikan', 0),
-(4, '2408233', 1, 5, '2024-08-23', 'Dikembalikan', 0);
+(4, '2408233', 1, 5, '2024-08-23', 'Dikembalikan', 0),
+(5, '2408264', 1, 5, '2024-08-26', 'Terlambat', 3),
+(6, '2408264', 3, 5, '2024-08-26', 'Terlambat', 4);
 
 -- --------------------------------------------------------
 
@@ -145,8 +149,7 @@ CREATE TABLE `koleksi` (
 INSERT INTO `koleksi` (`id_koleksi`, `id_user`, `id_buku`) VALUES
 (27, 3, 3),
 (28, 3, 1),
-(30, 5, 1),
-(31, 1, 2);
+(30, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +173,8 @@ CREATE TABLE `peminjaman` (
 INSERT INTO `peminjaman` (`id_peminjaman`, `kode_peminjaman`, `tanggal_peminjaman`, `tanggal_pengembalian`, `id_user`, `id_petugas`) VALUES
 (1, '2408211', '2024-08-19', '2024-08-20', 5, 1),
 (2, '2408222', '2024-08-22', '2024-08-31', 3, 1),
-(3, '2408233', '2024-08-23', '2024-08-28', 5, 1);
+(3, '2408233', '2024-08-23', '2024-08-28', 5, 1),
+(4, '2408264', '2024-08-12', '2024-08-25', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -204,7 +208,8 @@ CREATE TABLE `ulasan` (
 
 INSERT INTO `ulasan` (`id_ulasan`, `id_user`, `id_buku`, `rating`, `ulasan`) VALUES
 (1, 3, 1, 3, 'Good ending\r\n'),
-(3, 6, 1, 5, 'Baikk banggetette');
+(3, 6, 1, 5, 'Baikk banggetette'),
+(4, 5, 1, 3, 'sas');
 
 -- --------------------------------------------------------
 
@@ -311,13 +316,13 @@ ALTER TABLE `buku`
 -- AUTO_INCREMENT for table `denda`
 --
 ALTER TABLE `denda`
-  MODIFY `id_denda` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_denda` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `detail_peminjaman`
 --
 ALTER TABLE `detail_peminjaman`
-  MODIFY `id_detail_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_detail_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -341,19 +346,19 @@ ALTER TABLE `koleksi`
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_peminjaman` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `temp`
 --
 ALTER TABLE `temp`
-  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `ulasan`
 --
 ALTER TABLE `ulasan`
-  MODIFY `id_ulasan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_ulasan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user`

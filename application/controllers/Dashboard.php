@@ -63,4 +63,30 @@ class Dashboard extends CI_Controller
 		// 	$orientation
 		// );
 	}
+
+	public function myProfile()
+	{
+		$data = [
+			'title' => 'My Profile',
+		];
+
+		$this->form_validation->set_rules('username', 'Username', 'required');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		$this->form_validation->set_rules('nama', 'Nama', 'required');
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->template->load('template/layout', 'myprofile', $data);
+		} else {
+			$data = [
+				'nama' => $this->input->post('nama'),
+				'email' => $this->input->post('email'),
+				'alamat' => $this->input->post('alamat'),
+			];
+			$where = ['id_user' => $this->input->post('id_user')];
+			$this->db->update('user', $data, $where);
+			$this->session->set_userdata($data);
+			$this->session->set_flashdata('berhasil', 'Yeaaaaaaaaaay!!!');
+			redirect('myProfile');
+		}
+	}
 }

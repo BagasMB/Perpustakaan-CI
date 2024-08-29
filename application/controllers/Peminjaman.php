@@ -19,7 +19,7 @@ class Peminjaman extends CI_Controller
       'title' => 'Peminjaman',
       'peminjaman' =>  $this->db->where('user.id_user', $this->session->userdata('id_user'))->join('user', 'user.id_user = peminjaman.id_user')->order_by('kode_peminjaman', 'DESC')->get('peminjaman')->result_array(),
     ];
-    $this->template->load('template/layout', 'peminjaman', $data);
+    $this->template->load('template/layout', 'peminjaman/peminjaman', $data);
   }
 
   public function user($id)
@@ -30,7 +30,7 @@ class Peminjaman extends CI_Controller
       'userr' => $this->db->where('id_user', $id)->get('user')->row(),
       'temp' => $this->db->join('buku', 'temp.id_buku = buku.id_buku')->join('user', 'user.id_user = temp.id_user')->where('user.id_user', $id)->get('temp')->result(),
     ];
-    $this->template->load('template/layout', 'tambahPeminjaman', $data);
+    $this->template->load('template/layout', 'peminjaman/tambahPeminjaman', $data);
   }
 
   public function tambahPeminjaman()
@@ -117,7 +117,7 @@ class Peminjaman extends CI_Controller
       'peminjaman' =>  $this->db->join('user', 'user.id_user = peminjaman.id_user')->order_by('kode_peminjaman', 'DESC')->get('peminjaman')->result_array(),
       'user' => $this->db->where('role', "Peminjam")->get('user')->result_array(),
     ];
-    $this->template->load('template/layout', 'dataPeminjaman', $data);
+    $this->template->load('template/layout', 'peminjaman/dataPeminjaman', $data);
   }
 
   public function detail($kode_peminjaman)
@@ -128,7 +128,7 @@ class Peminjaman extends CI_Controller
       'kode_peminjaman' => $kode_peminjaman,
     ];
 
-    $this->template->load('template/layout', 'detailPeminjaman', $data);
+    $this->template->load('template/layout', 'peminjaman/detailPeminjaman', $data);
   }
 
   public function persetujuan($id_detail_peminjaman, $kode_peminjaman)
@@ -214,7 +214,7 @@ class Peminjaman extends CI_Controller
       'denda' => $this->db->join('denda', 'denda.id_denda=detail_peminjaman.id_denda')->join('buku', 'buku.id_buku=detail_peminjaman.id_buku')->where('detail_peminjaman.id_denda', $id)->get('detail_peminjaman')->row()
     ];
 
-    $this->template->load('template/layout', 'denda', $data);
+    $this->template->load('template/layout', 'peminjaman/denda', $data);
   }
 
   public function bayardenda()
