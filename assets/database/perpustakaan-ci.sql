@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 29, 2024 at 10:28 PM
+-- Generation Time: Sep 03, 2024 at 01:54 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.0.30
 
@@ -188,6 +188,19 @@ CREATE TABLE `temp` (
   `id_user` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `temp`
+--
+
+INSERT INTO `temp` (`id_temp`, `id_buku`, `id_user`) VALUES
+(57, 1, 3),
+(58, 1, 3),
+(59, 1, 3),
+(60, 1, 3),
+(61, 1, 3),
+(62, 1, 3),
+(63, 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -352,7 +365,7 @@ ALTER TABLE `peminjaman`
 -- AUTO_INCREMENT for table `temp`
 --
 ALTER TABLE `temp`
-  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id_temp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `ulasan`
